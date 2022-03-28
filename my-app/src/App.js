@@ -13,10 +13,14 @@ export default function App() {
 
   if (!post) return null;
 
+  let X = post.xR
+  let cal = X*X
+
   return (
     <div>
       <h1>{post.id}</h1>
-      <p>{post.xL}</p>
+      <h1>{cal}</h1>
+      
     </div>
   );
 }
