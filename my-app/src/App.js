@@ -1,48 +1,51 @@
-import axios from "axios";
-import React from "react";
-const baseURL = "http://localhost:5000/api/Onepoint";
+import React, { Component } from 'react'
+import axios from 'axios';
+import {Button} from 'antd';
+const math = require('mathjs');
 
-function cal(x){
+export default class Test extends Component {
+  constructor(props) {
+    super(props)
+    this.cal = this.cal.bind(this)
+    this.bitsection = this.bitsection.bind(this)
+    this.state = { ans: [],Function: '', XL: null, XR: null }
+  };
+  componentDidMount() {
+    axios.get(`http://localhost:8000/api/Bisection`)
+      .then(res => {
+        const data = res.data;
+        this.setState({ 
+            Function:data.fx,
+            XL:data.xL,
+            XR:data.xR,
+        });
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
+  cal(x){
+    return math.evaluate(this.state.Function, { x: x })
+  };
+  bitsection(){
+    var cal = this.cal
+    console.log(cal)
+    var xl = Number(this.state.XL)
+    var xr = Number(this.state.XR)
+    var xmn ;
+    console.log("xl: ",xl,"xr: ",xr)
+
+
+  };
   
-  let result = (1/2)-x;
-  return result;
-}
-
-function One_pst(X){
-  let X1 = X;
-  let Xs = cal(X1);
-for(var i = 0 ; i<10000;i++){
-  if((X1-Xs)/X1 > 0.000001){
-    return X1
+  render() {
     
+    return(
+      <div>
+        <Button onClick={this.bitsection}>Submit</Button>
+        <h1>HELLO WORD</h1>
+      </div>
+      
+    )
   }
-  else{
-          X1 = Xs;
-          Xs = cal(X1);
-
-  }
 }
-}
-
-
-export default function App() {
-  const [post, setPost] = React.useState(null);
-
-  React.useEffect(() => {
-    axios.get(baseURL).then((response) => {
-      setPost(response.data);
-    });
-  }, []);
-  if (!post) return null;
-
-  var X = post.x0;
-
-  return (
-    <div>
-      <h1>{post.id}</h1>
-      <h1>{X}</h1>
-      <h1>{One_pst(X)}</h1>
-    </div>
-  );
-}
-
