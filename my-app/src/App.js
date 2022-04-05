@@ -1,5 +1,6 @@
 /*import { BrowserRouter as Link,Router } from 'react-router-dom'*/
-import BisectionS from './rootofequetion/Bitsection';
+import Bar from './componants/barmenu';
+import { Menu, Dropdown, Button } from 'antd';
 
 import * as React from 'react';
 import './App.css';
@@ -8,18 +9,12 @@ import 'antd/dist/antd.css';
 import {Layout} from 'antd';
 const { Content , Header} = Layout;
 
-
 function App(){
   return(
     <div className = "App">
       <Layout>
-      <Header style={{background:'#a0d911'}}>
-
-      </Header>
-
-      <Content style={{ padding: '0 50px' ,background:'#ffffff' }}>
-      <BisectionS/>
-      </Content>
+      <Bar/>
+      <Content></Content>
     </Layout>
     
     </div>
