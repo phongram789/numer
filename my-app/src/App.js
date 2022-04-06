@@ -1,6 +1,8 @@
 /*import { BrowserRouter as Link,Router } from 'react-router-dom'*/
 import Bar from './componants/barmenu';
+import Bit from './rootofequetion/Bitsection';
 import { Menu, Dropdown, Button } from 'antd';
+
 
 import * as React from 'react';
 import './App.css';
@@ -14,7 +16,9 @@ function App(){
     <div className = "App">
       <Layout>
       <Bar/>
-      <Content></Content>
+      <Content>
+      <Bit/>
+      </Content>
     </Layout>
     
     </div>

@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import { Button, TextField } from '@mui/material';
 
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
 
 
 const math = require('mathjs');
@@ -15,7 +12,7 @@ export default class Test extends Component {
     super(props)
     this.cal = this.cal.bind(this)
     this.bitsection = this.bitsection.bind(this)
-    this.state = { Function: '', XL: null, XR: null }
+    this.state = { Function: '', XL: null, XR: null , ans: null, iterlatoin: []}
   };
 
   componentDidMount() {
@@ -40,11 +37,11 @@ export default class Test extends Component {
 
   };
   bitsection(){
-    var result = this.cal;
     var cal = this.cal
     console.log("fx: ",this.state.Function);
     var xl = Number(this.state.XL)
     var xr = Number(this.state.XR)
+    var iter = [];
     var time = 0;
     var eps = 0.00001
     var xmn ;
@@ -61,37 +58,38 @@ export default class Test extends Component {
       return
     }
     while (true) {
-      time++
+      time = time+ 1 
       var xmo = xmn
       xmn = (xl + xr) / 2
       if (cal(xmn) * cal(xr) > 0) {
           xr = xmn
           console.log("Root of equation is " , xmn);
           console.log("Iterlation " , time);
-      } else if (cal(xmn) * cal(xr) < 0) {
+          iter.push(xmn)
+      }
+      if (cal(xmn) * cal(xr) < 0) {
           xl = xmn
           console.log("Root of equation is " , xmn);
           console.log("Iterlation " , time);
-      } else {
-          console.log("reak is " , xmn);
-          
-          break
+          iter.push(xmn)
       }
       var err = Math.abs((xmn - xmo) / xmn)
-      if (err <= eps) {
-
-          console.log("Ans Root of equation is " , xmn);
-          console.log("Iterlation " , time);
-          break
+      if(err <= eps) {
+        iter.push(xmn)
+        console.log("Ans Root of equation is " , xmn);
+        console.log("Iterlation " , time);
+        this.setState({ ans: xmn })
+        break
       }
+
     }
-    /*this.forceUpdate()*/
+    this.setState({ iterlatoin: iter })
   };
   
   render() {
     
     return(
-      <div>
+      <ul>
         <br></br>
         <TextField 
             label="Function"
@@ -99,6 +97,7 @@ export default class Test extends Component {
             this.setState({Function:ip.target.value})
             this.forceUpdate()}}
             value={this.state.Function}
+            name="FUNCTION"
             />
         <h1></h1>
         <TextField
@@ -110,6 +109,7 @@ export default class Test extends Component {
             }}
             onChange={(e) => {this.setState({ XL: e.target.value })
             this.forceUpdate()}}value={this.state.XL}
+            placeholder="XL"
         />
 
         <p></p>
@@ -129,11 +129,25 @@ export default class Test extends Component {
           />
         <h1></h1>
         <Button
-          
+        
           variant="contained" onClick={this.bitsection}>Submit
         </Button>
         <h1>HELLO WORD</h1>
-      </div>
+        
+        <TextField
+            id="outlined-number"
+            label="ans"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value={this.state.ans}
+            placeholder="ans"
+          />
+          <ul></ul>
+          <Button color="inherit" onClick={() => {
+        console.info("Error: ",this.state.iterlatoin);
+      }}>เช็คError</Button>
+      </ul>
       
     )
   }
