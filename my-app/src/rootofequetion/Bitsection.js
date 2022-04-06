@@ -12,7 +12,7 @@ export default class Test extends Component {
     super(props)
     this.cal = this.cal.bind(this)
     this.bitsection = this.bitsection.bind(this)
-    this.state = { Function: '', XL: null, XR: null , ans: null, iterlatoin: []}
+    this.state = { Function: '', XL: null, XR: null , ans: null, iterlatoin: [],Error: []}
   };
 
   componentDidMount() {
@@ -41,6 +41,7 @@ export default class Test extends Component {
     console.log("fx: ",this.state.Function);
     var xl = Number(this.state.XL)
     var xr = Number(this.state.XR)
+    var ErrorA = [];
     var iter = [];
     var time = 0;
     var eps = 0.00001
@@ -58,7 +59,7 @@ export default class Test extends Component {
       return
     }
     while (true) {
-      time = time+ 1 
+      time = time + 1 
       var xmo = xmn
       xmn = (xl + xr) / 2
       if (cal(xmn) * cal(xr) > 0) {
@@ -74,16 +75,19 @@ export default class Test extends Component {
           iter.push(xmn)
       }
       var err = Math.abs((xmn - xmo) / xmn)
+      ErrorA.push(err);
       if(err <= eps) {
         iter.push(xmn)
         console.log("Ans Root of equation is " , xmn);
         console.log("Iterlation " , time);
         this.setState({ ans: xmn })
+        ErrorA.push(err);
         break
       }
 
     }
     this.setState({ iterlatoin: iter })
+    this.setState({ Error: ErrorA })
   };
   
   render() {
@@ -145,7 +149,7 @@ export default class Test extends Component {
           />
           <ul></ul>
           <Button color="inherit" onClick={() => {
-        console.info("Error: ",this.state.iterlatoin);
+        console.info("Ans: ",this.state.iterlatoin,"Error: ",this.state.Error)
       }}>เช็คError</Button>
       </ul>
       
