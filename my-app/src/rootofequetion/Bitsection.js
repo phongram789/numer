@@ -1,26 +1,29 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import { Button, TextField } from '@mui/material';
-
-
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 const math = require('mathjs');
-
 export default class Test extends Component {
-  
   constructor(props) {
     super(props)
     this.cal = this.cal.bind(this)
     this.bitsection = this.bitsection.bind(this)
-    this.state = { Function: '', XL: null, XR: null , ans: null, iterlatoin: [],Error: []}
+    this.state = { Context: " ",Function: '', XL: null, XR: null , ans: null, iterlatoin: [],Error: []}
   };
 
   componentDidMount() {
-    axios.get(`http://localhost:5000/api/Bisection`)
+    console.log(this.props.Token)
+    if(this.props.Token !== ""){
+      axios.get(`http://localhost:5000/api/Bisection`,{
+        headers:{
+        Authorization: 'Bearer ' + this.props.Token
+      }})
       .then(res => {
         const data = res.data;
         console.log(data)
         this.setState({ 
+            Context:data.text,
             Function:data.fx,
             XL:data.xL,
             XR:data.xR,
@@ -29,6 +32,7 @@ export default class Test extends Component {
       .catch(err => {
         console.error(err)
       })
+    }
   }
   cal(x){
     return math.evaluate(this.state.Function, { x: x })
@@ -37,6 +41,9 @@ export default class Test extends Component {
 
   };
   bitsection(){
+    var data = []
+    data['error'] = []
+    data['time'] = []
     var cal = this.cal
     console.log("fx: ",this.state.Function);
     var xl = Number(this.state.XL)
@@ -58,6 +65,8 @@ export default class Test extends Component {
       /*this.forceUpdate()*/
       return
     }
+    data['error'][time] = 0
+    data['time'][time] = 0
     while (true) {
       time = time + 1 
       var xmo = xmn
@@ -75,26 +84,33 @@ export default class Test extends Component {
           iter.push(xmn)
       }
       var err = Math.abs((xmn - xmo) / xmn)
+      data['time'][time] = time
+      data['error'][time] = Math.abs(err).toFixed(6)
       ErrorA.push(err);
       if(err <= eps) {
         iter.push(xmn)
         console.log("Ans Root of equation is " , xmn);
         console.log("Iterlation " , time);
-        this.setState({ ans: xmn })
+        this.setState({ ans: xmn.toFixed(6) })
+        data['error'][time] = err
         ErrorA.push(err);
         break
       }
 
     }
     this.setState({ iterlatoin: iter })
-    this.setState({ Error: ErrorA })
+    this.setState({ Error: data })
+    console.log("data: ",data);
+
   };
   
   render() {
     
     return(
       <ul>
-        <br></br>
+        <br />
+        <h1>{this.state.Context}</h1>
+        <br />
         <TextField 
             label="Function"
             onChange={(ip) => {
@@ -112,7 +128,8 @@ export default class Test extends Component {
               shrink: true,
             }}
             onChange={(e) => {this.setState({ XL: e.target.value })
-            this.forceUpdate()}}value={this.state.XL}
+            this.forceUpdate()}}
+            value={this.state.XL}
             placeholder="XL"
         />
 
@@ -132,12 +149,10 @@ export default class Test extends Component {
             placeholder="XR"
           />
         <h1></h1>
-        <Button
-        
-          variant="contained" onClick={this.bitsection}>Submit
-        </Button>
-        <h1>HELLO WORD</h1>
-        
+        <Button variant="contained" onClick={this.bitsection}>Submit</Button>
+        <ul></ul>
+        <div><br></br></div>
+
         <TextField
             id="outlined-number"
             label="ans"
@@ -148,9 +163,18 @@ export default class Test extends Component {
             placeholder="ans"
           />
           <ul></ul>
+          
           <Button color="inherit" onClick={() => {
         console.info("Ans: ",this.state.iterlatoin,"Error: ",this.state.Error)
       }}>เช็คError</Button>
+
+      <LineChart width={600} height={300} data={this.state.Error}>
+          <Line type="monotone" dataKey="time" stroke="#8884d8" />
+          <CartesianGrid stroke="#ccc" />
+          <XAxis dataKey="error" />
+          <YAxis />
+        </LineChart>
+
       </ul>
       
     )
