@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import { Button, TextField } from '@mui/material';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 
-
+var dataset = []
 const math = require('mathjs');
 
 export default class Test extends Component {
-  
   constructor(props) {
     super(props)
     this.cal = this.cal.bind(this)
@@ -37,6 +37,13 @@ export default class Test extends Component {
 
   };
   bitsection(){
+    
+    var data = [];
+    data['time'] = []
+    data['xl'] = []
+    data['xr'] = []
+    data['error']=[]
+
     var cal = this.cal
     console.log("fx: ",this.state.Function);
     var xl = Number(this.state.XL)
@@ -47,6 +54,7 @@ export default class Test extends Component {
     var eps = 0.00001
     var xmn ;
     console.log("xl: ",xl,"xr: ",xr)
+
     var xmn = (xl + xr) / 2;
     if (cal(xmn) * cal(xr) > 0) {
       xr = xmn
@@ -55,9 +63,14 @@ export default class Test extends Component {
         xl = xmn
     }
     else {
-      /*this.forceUpdate()*/
       return
     }
+
+    data['time'][time] = time
+    data['xl'][time] = xl
+    data['xr'][time] = xr
+    data['error'][time] = 0
+
     while (true) {
       time = time + 1 
       var xmo = xmn
@@ -67,14 +80,22 @@ export default class Test extends Component {
           console.log("Root of equation is " , xmn);
           console.log("Iterlation " , time);
           iter.push(xmn)
+
       }
       if (cal(xmn) * cal(xr) < 0) {
           xl = xmn
           console.log("Root of equation is " , xmn);
           console.log("Iterlation " , time);
           iter.push(xmn)
+        
       }
+
       var err = Math.abs((xmn - xmo) / xmn)
+      
+      data['time'][time] = time
+      data['xl'][time] = xl
+      data['xr'][time] = xr
+      data['error'][time] = Math.abs((xmn - xmo) / xmn)
       ErrorA.push(err);
       if(err <= eps) {
         iter.push(xmn)
@@ -82,12 +103,29 @@ export default class Test extends Component {
         console.log("Iterlation " , time);
         this.setState({ ans: xmn })
         ErrorA.push(err);
+        data['time'][time] = time
+        data['xl'][time] = xl
+        data['xr'][time] = xr
+        data['error'][time] = Math.abs((xmn - xmo) / xmn)
         break
       }
 
     }
+    this.createdataset(data['time'], data['xl'], data['xr'],data['error'])
     this.setState({ iterlatoin: iter })
     this.setState({ Error: ErrorA })
+  };
+
+  createdataset(time,xl,xr,error){
+    dataset = []
+    for(var i = 0; i < xl.length; i++){
+      dataset.push({
+        time: time[i],
+        xl: xl[i],
+        xr: xr[i],
+        error: error[i],
+      })
+    }
   };
   
   render() {
@@ -136,7 +174,7 @@ export default class Test extends Component {
         
           variant="contained" onClick={this.bitsection}>Submit
         </Button>
-        <h1>HELLO WORD</h1>
+        <h1></h1>
         
         <TextField
             id="outlined-number"
@@ -149,10 +187,59 @@ export default class Test extends Component {
           />
           <ul></ul>
           <Button color="inherit" onClick={() => {
-        console.info("Ans: ",this.state.iterlatoin,"Error: ",this.state.Error)
+        console.info({dataset})
       }}>เช็คError</Button>
-      </ul>
+
+      <LineChart
+      width={800}
+      height={500}
+      data={dataset}
+      margin={{
+        top: 5,
+        right: 30,
+        left: 20,
+        bottom: 5
+      }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="time" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Line
+        type="monotone"
+        dataKey="xl"
+        stroke="#8884d8"
+        activeDot={{ r: 8 }}
+      />
+      <Line type="monotone" dataKey="xr" stroke="#82ca9d" />
+    </LineChart>
+
+    <LineChart
+      width={800}
+      height={500}
+      data={dataset}
+      margin={{
+        top: 5,
+        right: 30,
+        left: 20,
+        bottom: 5
+      }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="time" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Line
+        type="monotone"
+        dataKey="error"
+        stroke="#8884d8"
+        activeDot={{ r: 8 }}
+      />
       
+    </LineChart>
+      </ul>
     )
   }
 }
