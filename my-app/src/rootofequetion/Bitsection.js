@@ -22,8 +22,8 @@ export default class Test extends Component {
         console.log(data)
         this.setState({ 
             Function:data.fx,
-            XL:data.xL,
-            XR:data.xR,
+            XL:data.xl,
+            XR:data.xr,
         });
       })
       .catch(err => {
@@ -131,7 +131,7 @@ export default class Test extends Component {
   render() {
     
     return(
-      <ul>
+      <div style={{ width: '100%' }}>
         <br></br>
         <TextField 
             label="Function"
@@ -239,7 +239,7 @@ export default class Test extends Component {
       />
       
     </LineChart>
-      </ul>
+      </div>
     )
   }
 }

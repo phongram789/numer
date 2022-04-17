@@ -1,6 +1,8 @@
 import React,{useState} from 'react';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom'
 import Bitsection from './rootofequetion/Bitsection';
+import Falsposition from './rootofequetion/falseposition';
+import Oneposition from './rootofequetion/oneposition';
 import { Menu, Dropdown, Button } from 'antd';
 import 'antd/dist/antd.css';
 import './App.css';
@@ -16,6 +18,9 @@ const menu1 = (
     </Menu.Item>
     <Menu.Item >
       <Link to="/Falsposition">Falsposition</Link>
+    </Menu.Item>
+    <Menu.Item >
+      <Link to="/Oneposition">Oneposition</Link>
     </Menu.Item>
   </Menu>
 );
@@ -54,6 +59,8 @@ function App(){
         <Content className="site-layout-background" style={{ padding: 40,margin: 0,minHeight: 1000, }}>
           <Routes>
             <Route exact path="/Bitsection" element={<Bitsection Token={Token}/>}/>
+            <Route exact path="/Falsposition" element={<Falsposition Token={Token}/>}/>
+            <Route exact path="/Oneposition" element={<Oneposition Token={Token}/>}/>
           </Routes>
         </Content>
 
