@@ -36,7 +36,6 @@ export default class Test extends Component {
         var cal = this.cal
         var data = []
         var time = 0;
-        var ans;
         data['Iter'] = []
         data['X'] = []
         data['Xn'] = []
