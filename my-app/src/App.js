@@ -14,7 +14,7 @@ const { Content , Header} = Layout;
 const menu1 = (
   <Menu>
     <Menu.Item >
-      <Link to="/Bitsection">Bitsection</Link>
+      <Link to="/Bisection">Bisection</Link>
     </Menu.Item>
     <Menu.Item >
       <Link to="/Falsposition">Falsposition</Link>
@@ -49,7 +49,7 @@ function App(){
               
               <Dropdown overlay={menu1}>
                 <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                <Button>Root of Equation</Button>
+                <Button>LINEAR ALGEBRAIC EQUATIONS</Button>
                 </a>
               </Dropdown>
           </Menu>
@@ -58,7 +58,7 @@ function App(){
 
         <Content className="site-layout-background" style={{ padding: 40,margin: 0,minHeight: 1000, }}>
           <Routes>
-            <Route exact path="/Bitsection" element={<Bitsection Token={Token}/>}/>
+            <Route exact path="/Bisection" element={<Bitsection Token={Token}/>}/>
             <Route exact path="/Falsposition" element={<Falsposition Token={Token}/>}/>
             <Route exact path="/Oneposition" element={<Oneposition Token={Token}/>}/>
           </Routes>

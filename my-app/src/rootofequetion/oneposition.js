@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 
@@ -9,12 +10,12 @@ const math = require('mathjs');
 
 var dataset = [];
 
-export default class Test extends Component {
+export default class Numer extends Component {
     constructor(props){
         super(props)
         this.cal = this.cal.bind(this)
         this.one_pst = this.one_pst.bind(this)
-        this.state = {Text:'', Function: '', X: null,ans: null}
+        this.state = {Text:'', Function: '', X: null,ans: null ,check: null}
     }
     componentDidMount(){
         axios.get('http://localhost:5000/api/Onepoint').then(res=>{
@@ -35,7 +36,7 @@ export default class Test extends Component {
     one_pst(){
         var cal = this.cal
         var data = []
-        var time = 0;
+        var iter= 0;
         data['Iter'] = []
         data['X'] = []
         data['Xn'] = []
@@ -46,15 +47,21 @@ export default class Test extends Component {
         var error;
         var es = 0.000001
 	    while(true){
-            time = time+1
+            iter = iter+1
             error = math.abs((X-Xn)/X) ;
-            data['Iter'][time] =time
-            data['X'][time]=X
-            data['Xn'][time] = Xn
-            data['error'][time] = error
+            data['Iter'][iter] =iter
+            data['X'][iter]=X
+            data['Xn'][iter] = Xn
+            data['error'][iter] = error
+            if(iter >500){
+                break;
+            }
 		    if(error < es){
+                console.log(data)
 			    console.log(X);
-                this.setState({ ans: X })
+                this.setState({ ans: X.toFixed(6) })
+                let check = math.evaluate(this.state.Function, { x: X })
+                this.setState({ check: check })
 			    break;
 		    }
 		    else{
@@ -69,7 +76,7 @@ export default class Test extends Component {
         dataset = []
         for(var i = 0; i < iter.length; i++){
             dataset.push({
-            Iter: iter[i+1],
+            Iter: iter[i],
             X: x[i],
             Xn: xn[i],
             Error: error[i],
@@ -107,6 +114,8 @@ export default class Test extends Component {
                 <ul/>
                 <TextField id="outlined-number" label="ans" InputLabelProps={{shrink: true,}} value={this.state.ans} placeholder="ans"/>
                 <ul/>
+                <TextField label="ช่องตรวจคำตอบ" color="secondary" focused value={this.state.check}/>
+                <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>
                 <Button variant="inherit"  onClick={() => {console.info({dataset}," ",this.state.ans)}}>console.log</Button>
                 <LineChart
                     width={800}
@@ -145,8 +154,8 @@ export default class Test extends Component {
                     }}
                     >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="time" />
-                    <YAxis type="number" />
+                    <XAxis dataKey="Iter" />
+                    <YAxis type="number" padding={{ top: 20, bottom: 20 }} allowDataOverflow={true} ticks={[0.001,0.01,0.03,0.05,0.06]} domain={[0.001, 0.1]} />
                     <Tooltip />
                     <Legend />
                     <Line
