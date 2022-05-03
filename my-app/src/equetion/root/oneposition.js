@@ -83,7 +83,6 @@ export default class Numer extends Component {
             })
         }
     };
-
     render() {
         return(
             <div style={{ width: '100%' }}>
