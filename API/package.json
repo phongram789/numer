@@ -5,9 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "api": "json-server --watch data.json --port 5000"
+    "api": "json-server --watch data.json --port 5000 -m ./node_modules/json-server-auth -r routes.json"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "json-server": "^0.17.0",
+    "json-server-auth": "^2.1.0"
+  }
 }

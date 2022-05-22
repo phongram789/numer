@@ -20,7 +20,7 @@ export default class Numer extends Component {
     };
 
     componentDidMount(){
-        axios.get('http://localhost:5000/api/cramer').then(res=>{
+        /*axios.get('http://localhost:5000/api/cramer').then(res=>{
             const data = res.data;
             console.log(data);
             this.setState({
@@ -28,7 +28,7 @@ export default class Numer extends Component {
                 A:data.A,
                 Col:data.col
             })
-        })
+        })*/
     };
     
     createdataset(iter,x,xn,error){
@@ -52,7 +52,7 @@ export default class Numer extends Component {
                 <div>
                 <TextField
                     id="outlined-number"
-                    label="SIZE"
+                    label="SIZE X"
                     type="number"
                     InputLabelProps={{
                         shrink: true,
@@ -64,7 +64,7 @@ export default class Numer extends Component {
                 />
                 <TextField
                     id="outlined-number"
-                    label="XR"
+                    label="SXR"
                     type="number"
                     InputLabelProps={{
                     shrink: true,

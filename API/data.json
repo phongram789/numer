@@ -1,4 +1,16 @@
 {
+  "users": [
+    {
+      "email": "good@gmail.com",
+      "password": "$2a$10$YtnWFpgLpx0Y3mfXd9EwNe0yqWJRoM2W6DM/ao0wuspjpWrnu7g8W",
+      "id": 1
+    },
+    {
+      "email": "lilaon@gmail.com",
+      "password": "$2a$10$V0ov2uCOR3ohfapSEp6MeOR1ojDLGw5ZFulLlJiGs2JmBQEr5tF.2",
+      "id": 2
+    }
+  ],
   "api": [
     {
       "id": "Bisection",
@@ -18,17 +30,21 @@
       "id": "Onepoint",
       "context": "จงใช้วิธี One-Positon",
       "fx": "(1-(x*0.15))/1.85",
-      "x": 0.00
+      "x": 0
     },
     {
       "id": "cramer",
       "context": "จงใช้วิธี crammer",
-      "A":[2,2],
-      "B":[2,2],
+      "A": [
+        2,
+        2
+      ],
+      "B": [
+        2,
+        2
+      ],
       "col": 2
     },
-    {
-      
-    }
+    {}
   ]
 }

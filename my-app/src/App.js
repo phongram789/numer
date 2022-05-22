@@ -40,7 +40,7 @@ function App(){
     "email":"good@gmail.com",
     "password":"999999"
   }).then(res=>{setToken(res.data.accessToken)})
-  //console.log(Token)
+  console.log(Token)
   
 
   return(

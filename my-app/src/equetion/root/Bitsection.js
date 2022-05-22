@@ -17,7 +17,14 @@ export default class Numer extends Component {
   };
 
   componentDidMount() {
-    axios.get(`http://localhost:5000/api/Bisection`)
+    console.log(this.props.Token)
+    if(this.props.Token !== ""){
+      axios.get(`http://localhost:5000/api/Bisection`,{
+        headers:{
+          Authorization: 'Bearer ' + this.props.Token
+        }
+      })
+      
       .then(res => {
         const data = res.data;
         console.log(data)
@@ -31,6 +38,7 @@ export default class Numer extends Component {
       .catch(err => {
         console.error(err)
       })
+    }
   }
   cal(x){
     var result = math.evaluate(this.state.Function, { x: x })
