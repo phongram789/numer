@@ -24,7 +24,6 @@ export default class Numer extends Component {
           Authorization: 'Bearer ' + this.props.Token
         }
       })
-      
       .then(res => {
         const data = res.data;
         console.log(data)
@@ -39,6 +38,7 @@ export default class Numer extends Component {
         console.error(err)
       })
     }
+    
   }
   cal(x){
     var result = math.evaluate(this.state.Function, { x: x })

@@ -29,7 +29,7 @@ export default class Numer extends Component {
         }
     };
 
-    componentDidMount(){
+    /*componentDidMount(){
         axios.get('http://localhost:5000/api/cramer').then(res=>{
             const data = res.data;
             console.log(data);
@@ -49,8 +49,40 @@ export default class Numer extends Component {
                 }
             }
         })
-    };
-    
+    };*/
+    componentDidMount() {
+        console.log(this.props.Token)
+        if(this.props.Token !== ""){
+          axios.get(`http://localhost:5000/api/cramer`,{
+            headers:{
+              Authorization: 'Bearer ' + this.props.Token
+            }
+          })
+          .then(res => {
+            const data = res.data;
+            console.log(data)
+            this.setState({ 
+                Text:data.context,
+                A:data.A,
+                Col:data.col,
+                Row:data.row
+            });
+            this.creatmatrix()
+            for (var i = 0; i < this.state.Row; i++) {
+                for (var j = 0; j < this.state.Col; j++) {
+                    document.getElementById('a' + (i + 1) + '' + (j + 1)).value =
+                        data.A[i][j]
+                    document.getElementById('b' + (i + 1)).value =
+                        data.B[i][0]
+                }
+            }
+
+          })
+          .catch(err => {
+            console.error(err)
+          })
+        }
+      }
     creatmatrix(){
         let row = this.state.Row
         let col = this.state.Col

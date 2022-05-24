@@ -24,18 +24,34 @@ export default class Numer extends Component {
             ,ans: null
         }
     }
-    componentDidMount(){
-        axios.get('http://localhost:5000/api/Falseposition').then(res=>{
+    componentDidMount() {
+    console.log(this.props.Token)
+    if(this.props.Token !== ""){
+        console.log(this.props.Token)
+        if(this.props.Token !== ""){
+          axios.get(`http://localhost:5000/api/Falseposition`,{
+            headers:{
+              Authorization: 'Bearer ' + this.props.Token
+            }
+          })
+          .then(res => {
             const data = res.data;
-            console.log(data);
-            this.setState({
+            console.log(data)
+            this.setState({ 
                 Text:data.context,
                 Function:data.fx,
                 XL:data.xl,
                 XR:data.xr,
-            })
-        })
-    };
+            });
+          })
+          .catch(err => {
+            console.error(err)
+          })
+        }
+        
+      }
+    
+  }
 
     cal(x){
         var result = math.evaluate(this.state.Function, { x: x })

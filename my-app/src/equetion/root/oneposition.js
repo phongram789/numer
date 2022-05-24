@@ -17,17 +17,32 @@ export default class Numer extends Component {
         this.one_pst = this.one_pst.bind(this)
         this.state = {Text:'', Function: '', X: null,ans: null ,check: null}
     }
+
     componentDidMount(){
-        axios.get('http://localhost:5000/api/Onepoint').then(res=>{
-            const data = res.data;
-            console.log(data);
-            this.setState({
-                Text:data.context,
-                Function:data.fx,
-                X:data.x,
-            })
-        })
-    };
+    console.log("Token is"+this.props.Token)
+    if(this.props.Token !== ""){
+      axios.get(`http://localhost:5000/api/Onepoint`,{
+        headers:{
+          Authorization: 'Bearer ' + this.props.Token
+        }
+      })
+      .then(res => {
+        const data = res.data;
+        console.log(data)
+        this.setState({ 
+            Text:data.context,
+            Function:data.fx,
+            X:data.x,
+        });
+      })
+      .catch(err => {
+        console.error(err)
+      })
+
+      
+    }
+    
+  }
 
     cal(x){
         var result = math.evaluate(this.state.Function, { x: x })
