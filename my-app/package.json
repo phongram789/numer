@@ -14,6 +14,7 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
+    "algebra-latex": "^2.0.3",
     "antd": "^4.19.5",
     "axios": "^0.26.1",
     "expr-eval": "^2.0.2",
@@ -23,6 +24,7 @@
     "react-native": "^0.68.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^2.1.3",
+    "recharts": "^2.1.10",
     "styled-components": "^5.3.5",
     "web-vitals": "^2.1.4"
   },

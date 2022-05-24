@@ -41,14 +41,13 @@ export default class Numer extends Component {
             })
             this.creatmatrix()
             for (var i = 0; i < this.state.Row; i++) {
-            for (var j = 0; j < this.state.Dimension; j++) {
-                document.getElementById('a' + (i + 1) + '' + (j + 1)).value =
-                    data.A[i][j]
-                document.getElementById('b' + (i + 1)).value =
-                    data.B[i][0]
+                for (var j = 0; j < this.state.Col; j++) {
+                    document.getElementById('a' + (i + 1) + '' + (j + 1)).value =
+                        data.A[i][j]
+                    document.getElementById('b' + (i + 1)).value =
+                        data.B[i][0]
+                }
             }
-        }
-        
         })
     };
     

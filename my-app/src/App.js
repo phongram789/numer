@@ -4,6 +4,9 @@ import Bitsection from './equetion/root/Bitsection';
 import Falsposition from './equetion/root/falseposition';
 import Oneposition from './equetion/root/oneposition';
 import Cramer from './equetion/linear/cramer'
+import Conjugate from './equetion/linear/Conjugate';
+import Jacobi from './equetion/linear/jacobi'
+import Gaussseidel from './equetion/linear/gaussseidel'
 import { Menu, Dropdown, Button } from 'antd';
 import 'antd/dist/antd.css';
 import './App.css';
@@ -29,6 +32,15 @@ const menu2 = (
   <Menu>
     <Menu.Item >
       <Link to="/Cramer">Cramer's rule</Link>
+    </Menu.Item>
+    <Menu.Item >
+      <Link to="/Conjugate">Conjugate Gradient</Link>
+    </Menu.Item>
+    <Menu.Item >
+      <Link to="/Jacobi">Jacobi Iteration</Link>
+    </Menu.Item>
+    <Menu.Item >
+      <Link to="/gaussseidel">Gauss Seidel</Link>
     </Menu.Item>
   </Menu>
 );
@@ -83,6 +95,9 @@ function App(){
             <Route exact path="/Falsposition" element={<Falsposition Token={Token}/>}/>
             <Route exact path="/Oneposition" element={<Oneposition Token={Token}/>}/>
             <Route exact path="/Cramer" element={<Cramer Token={Token}/>}/>
+            <Route exact path="/Conjugate" element={<Conjugate Token={Token}/>}/>
+            <Route exact path="/jacobi" element={<Jacobi Token={Token}/>}/>
+            <Route exact path="/gaussseidel" element={<Gaussseidel Token={Token}/>}/>
           </Routes>
         </Content>
 
