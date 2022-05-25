@@ -11,6 +11,58 @@
     }
   ],
   "paths": {
+    
+    "/login": {
+      "get": {
+        "description": "Auto generated using Swagger Inspector",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "examples": {
+                  "1": {
+                    "value": "{\"Token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imdvb2RAZ21haWwuY29tIiwiaWF0IjoxNjUzNDg1MDg2LCJleHAiOjE2NTM0ODg2ODYsInN1YiI6IjEifQ.pSorzP4sTDFuLxqvWBAtl_teQredTOuWrk8amqiRVqU\"}"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:5000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:5000"
+        }
+      ]
+    },
     "/api/Bisection": {
       "get": {
         "description": "Auto generated using Swagger Inspector",
@@ -40,35 +92,6 @@
         }
       ]
     },
-      "/login": {
-        "post": {
-          "description": "Auto generated using Swagger Inspector",
-          "responses": {
-            "200": {
-              "description": "Auto generated using Swagger Inspector",
-              "content": {
-                "application/json; charset=utf-8": {
-                  "examples": {
-                    "1": {
-                      "value": "{\"id\": \"Bisection\",\"context\": \"จงใช้วิธี Bisection เพื่อคำนวนหาค่า sqr(13,4) โดยกำหนดค่าขอบเขตเริ่มต้นระหว่าง 1.5 เเละ 2.0\",\"fx\": \"(x^2)-14\",\"xl\": 1.5,\"xr\": 2}"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "servers": [
-            {
-              "url": "http://localhost:5000"
-            }
-          ]
-        },
-        "servers": [
-          {
-            "url": "http://localhost:5000"
-          }
-        ]
-      },
     "/api/Falseposition": {
       "get": {
         "description": "Auto generated using Swagger Inspector",
