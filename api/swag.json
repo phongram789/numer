@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "API Numerical method",
+    "title": "api Numerical method",
     "description": "defaultDescription",
     "version": "0.1"
   },
@@ -11,7 +11,7 @@
     }
   ],
   "paths": {
-    "/api": {
+    "/api/Bisection": {
       "get": {
         "description": "Auto generated using Swagger Inspector",
         "responses": {
@@ -20,11 +20,95 @@
             "content": {
               "application/json; charset=utf-8": {
                 "examples": {
-                  "0": {
-                    "value": "{\"Token\":\"Example TOKEN\"}"
-                  },
                   "1": {
-                    "value": "{\"id\":\"Bisection\"}"
+                    "value": "{\"id\": \"Bisection\",\"context\": \"จงใช้วิธี Bisection เพื่อคำนวนหาค่า sqr(13,4) โดยกำหนดค่าขอบเขตเริ่มต้นระหว่าง 1.5 เเละ 2.0\",\"fx\": \"(x^2)-14\",\"xl\": 1.5,\"xr\": 2}"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:5000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:5000"
+        }
+      ]
+    },
+      "/login": {
+        "post": {
+          "description": "Auto generated using Swagger Inspector",
+          "responses": {
+            "200": {
+              "description": "Auto generated using Swagger Inspector",
+              "content": {
+                "application/json; charset=utf-8": {
+                  "examples": {
+                    "1": {
+                      "value": "{\"id\": \"Bisection\",\"context\": \"จงใช้วิธี Bisection เพื่อคำนวนหาค่า sqr(13,4) โดยกำหนดค่าขอบเขตเริ่มต้นระหว่าง 1.5 เเละ 2.0\",\"fx\": \"(x^2)-14\",\"xl\": 1.5,\"xr\": 2}"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "servers": [
+            {
+              "url": "http://localhost:5000"
+            }
+          ]
+        },
+        "servers": [
+          {
+            "url": "http://localhost:5000"
+          }
+        ]
+      },
+    "/api/Falseposition": {
+      "get": {
+        "description": "Auto generated using Swagger Inspector",
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "examples": {
+                  "1":{
+                    "value": "{\"id\": \"Bisection\",\"context\": \"จงใช้วิธี Bisection เพื่อคำนวนหาค่า sqr(13,4) โดยกำหนดค่าขอบเขตเริ่มต้นระหว่าง 1.5 เเละ 2.0\",\"fx\": \"(x^2)-14\",\"xl\": 1.5,\"xr\": 2}"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:5000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:5000"
+        }
+      ]
+    },
+    "/api/cramer": {
+      "get": {
+        "description": "Auto generated using Swagger Inspector",
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "examples": {
+                  "1":{
+                    "value" : "{\"id\": \"cramer\",\"context\": \"จงใช้วิธี crammer\",\"col\":3,\"row\":3,\"A\": [[-2, 3, 1],[3, 4, -5],[1, -2, 1]],\"B\": [[9], [0], [-4]]}"
                   }
                 }
               }
