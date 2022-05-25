@@ -1,0 +1,63 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Numerical method",
+    "description": "defaultDescription",
+    "version": "0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000"
+    }
+  ],
+  "paths": {
+    "/api": {
+      "get": {
+        "description": "Auto generated using Swagger Inspector",
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json; charset=utf-8": {
+                "examples": {
+                  "0": {
+                    "value": "{\"Token\":\"Example TOKEN\"}"
+                  },
+                  "1": {
+                    "value": "{\"id\":\"Bisection\"}"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:5000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:5000"
+        }
+      ]
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "http://yourauthurl.com",
+            "scopes": {
+              "scope_name": "Enter your scopes here"
+            }
+          }
+        }
+      }
+    }
+  }
+}
