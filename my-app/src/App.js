@@ -5,8 +5,9 @@ import Falsposition from './equetion/root/falseposition';
 import Oneposition from './equetion/root/oneposition';
 import Cramer from './equetion/linear/cramer'
 import Conjugate from './equetion/linear/Conjugate';
-import Jacobi from './equetion/linear/jacobi'
-import Gaussseidel from './equetion/linear/gaussseidel'
+import Jacobi from './equetion/linear/jacobi';
+import Gaussseidel from './equetion/linear/gaussseidel';
+import Newton from './equetion/interpolation/newton';
 import { Menu, Dropdown, Button } from 'antd';
 import 'antd/dist/antd.css';
 import './App.css';
@@ -44,6 +45,13 @@ const menu2 = (
     </Menu.Item>
   </Menu>
 );
+const menu3 = (
+  <Menu>
+    <Menu.Item >
+      <Link to="/Newton">Newton Divided Difference</Link>
+    </Menu.Item>
+  </Menu>
+);
 
 function App(){
   const [Token,setToken] = useState("");
@@ -73,10 +81,9 @@ function App(){
                 <Button>LINEAR ALGEBRAIC EQUATIONS</Button>
                 </a>
               </Dropdown>
-
-              <Dropdown overlay={menu2}>
+              <Dropdown overlay={menu3}>
                 <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                <Button>LINEAR ALGEBRAIC EQUATIONS</Button>
+                <Button>Divided Difference</Button>
                 </a>
               </Dropdown>
 
@@ -98,6 +105,7 @@ function App(){
             <Route exact path="/Conjugate" element={<Conjugate Token={Token}/>}/>
             <Route exact path="/jacobi" element={<Jacobi Token={Token}/>}/>
             <Route exact path="/gaussseidel" element={<Gaussseidel Token={Token}/>}/>
+            <Route exact path="/newton" element={<Newton Token={Token}/>}/>
           </Routes>
         </Content>
 

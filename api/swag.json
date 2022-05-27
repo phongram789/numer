@@ -13,7 +13,7 @@
   "paths": {
     
     "/login": {
-      "get": {
+      "post": {
         "description": "Auto generated using Swagger Inspector",
         "parameters": [
           {
@@ -44,7 +44,7 @@
               "application/json; charset=utf-8": {
                 "examples": {
                   "1": {
-                    "value": "{\"Token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imdvb2RAZ21haWwuY29tIiwiaWF0IjoxNjUzNDg1MDg2LCJleHAiOjE2NTM0ODg2ODYsInN1YiI6IjEifQ.pSorzP4sTDFuLxqvWBAtl_teQredTOuWrk8amqiRVqU\"}"
+                    "value": "{\"accessToken\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imdvb2RAZ21haWwuY29tIiwiaWF0IjoxNjUzNDg1MDg2LCJleHAiOjE2NTM0ODg2ODYsInN1YiI6IjEifQ.pSorzP4sTDFuLxqvWBAtl_teQredTOuWrk8amqiRVqU\"}"
                   }
                 }
               }

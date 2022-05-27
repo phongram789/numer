@@ -7,7 +7,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 var dataset = []
 const math = require('mathjs');
-
+const AlgebraLatex = require("algebra-latex");
 export default class Numer extends Component {
   constructor(props) {
     super(props)
@@ -41,12 +41,13 @@ export default class Numer extends Component {
     
   }
   cal(x){
-    var result = math.evaluate(this.state.Function, { x: x })
-    return result;
+    const algebraObj = new AlgebraLatex()
+      .parseLatex(this.state.Function)
+      .toMath();
+    console.log(math.evaluate(algebraObj, { x: x }));
+    return math.evaluate(algebraObj, { x: x });
   };
-  result(){
 
-  };
   bitsection(){
     var cal = this.cal
     var xl = this.state.XL ,xr = this.state.XR
