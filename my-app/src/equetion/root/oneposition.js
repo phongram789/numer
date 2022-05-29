@@ -34,6 +34,13 @@ export default class Numer extends Component {
             Function:data.fx,
             X:data.x,
         });
+        /*for (var i = 0; i < this.state.Function.length; i++) {
+            question = []
+            question.push({qt: this.state.Function[i] })
+            this.forceUpdate()
+          }
+          console.log(question)*/
+          //this.setState({Function : question[0]})
       })
       .catch(err => {
         console.error(err)
@@ -74,7 +81,7 @@ export default class Numer extends Component {
 		    if(error < es){
                 console.log(data)
 			    console.log(X);
-                this.setState({ ans: X.toFixed(6) })
+                this.setState({ ans: X })
                 let check = math.evaluate(this.state.Function, { x: X })
                 this.setState({ check: check })
 			    break;

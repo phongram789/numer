@@ -1,16 +1,13 @@
 FROM node:15-alpine 
 
-WORKDIR /app
+WORKDIR /api
 
-COPY package.json /app
-COPY package-lock.json .
+COPY package*.json /api
 
 
 RUN npm i
 
-COPY . /app
-
-EXPOSE 5000
+COPY . .
 
 CMD [ "node" ,"./server.js"]
 

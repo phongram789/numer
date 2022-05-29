@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "antd/dist/antd.css";
 import { Card, Input, Button, Table } from "antd";
-import { lusolve, format } from "mathjs";
 const AlgebraLatex = require("algebra-latex");
 const math = require("mathjs");
 
@@ -38,23 +37,23 @@ export default class Test extends Component {
   //API
   async Ex() {
     // const url = "https://api.randomuser.me/";
-    const url = "http://localhost:8000/Jacobi";
+    const url = "http://localhost:8000/Gauss_seijei";
     // const url = "http://127.0.0.1/Json/item.json";
     const response = await fetch(url);
     console.log(response);
     const data = await response.json();
     console.log(data);
     this.setState({
-      Dimension: data.Jacobi.Dimension,
+      Dimension: data.Gauss_seijei.Dimension,
     });
     this.createMatrix(this.state.Dimension, this.state.Dimension);
 
     for (var i = 0; i < this.state.Dimension; i++) {
       for (var j = 0; j < this.state.Dimension; j++) {
         document.getElementById("a" + (i + 1) + "" + (j + 1)).value =
-          data.Jacobi.A[i][j];
-        document.getElementById("b" + (i + 1)).value = data.Jacobi.B[i][0];
-        document.getElementById("x" + (i + 1)).value = data.Jacobi.X[i];
+          data.Gauss_seijei.A[i][j];
+        document.getElementById("b" + (i + 1)).value = data.Gauss_seijei.B[0];
+        document.getElementById("x" + (i + 1)).value = data.Gauss_seijei.X[i];
       }
     }
     this.initialSchema(this.state.Dimension);
@@ -83,12 +82,9 @@ export default class Test extends Component {
   cal() {
     var n = this.state.Dimension;
     this.initMatrix();
-    var temp;
     var xold;
     epsilon = new Array(n);
-    console.log("while");
     do {
-      temp = [];
       xold = JSON.parse(JSON.stringify(x));
       for (var i = 0; i < n; i++) {
         var sum = 0;
@@ -98,9 +94,8 @@ export default class Test extends Component {
             sum = sum + A[i][j] * x[j];
           }
         }
-        temp[i] = (B[i] - sum) / A[i][i]; //update x[i]
+        x[i] = (B[i] - sum) / A[i][i]; //update x[i]
       }
-      x = JSON.parse(JSON.stringify(temp));
       console.log("count", count);
       if (count >= 1000) {
         break;
@@ -259,7 +254,7 @@ export default class Test extends Component {
   render() {
     return (
       <div>
-        <h1>Jacobi Iteration</h1>
+        <h1>Gauss Seidel</h1>
         <div className="row">
           <div className="col">
             <div>

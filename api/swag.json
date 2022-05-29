@@ -15,51 +15,48 @@
     "/login": {
       "post": {
         "description": "Auto generated using Swagger Inspector",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "in": "path",
-            "required": true,
-            "style": "simple",
-            "explode": false,
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json":{
+              "schema":{
+                "$ref": "#/components/schemas/login_body"
+              },
+              "examples":{
+                "0": {
+                  "value": "{\"email\":\"lilaon@gmail.com\",\"password\":\"999999\"}"
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Auto generated using Swagger Inspector",
             "content": {
               "application/json; charset=utf-8": {
                 "examples": {
-                  "1": {
-                    "value": "{\"accessToken\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imdvb2RAZ21haWwuY29tIiwiaWF0IjoxNjUzNDg1MDg2LCJleHAiOjE2NTM0ODg2ODYsInN1YiI6IjEifQ.pSorzP4sTDFuLxqvWBAtl_teQredTOuWrk8amqiRVqU\"}"
+                  "0": {
+                    "value": "{\"Token\":\"Example Token\"}"
                   }
                 }
               }
             }
           }
         },
+        "security": [
+          {
+            "bearerAuth":[]
+          }
+        ],
         "servers": [
           {
-            "url": "http://localhost:5000"
+            "url": "http://localhost:5000/"
           }
         ]
       },
       "servers": [
         {
-          "url": "http://localhost:5000"
+          "url": "http://localhost:5000/"
         }
       ]
     },
@@ -80,6 +77,11 @@
             }
           }
         },
+        "security": [
+          {
+            "bearerAuth":[]
+          }
+        ],
         "servers": [
           {
             "url": "http://localhost:5000"
@@ -109,6 +111,11 @@
             }
           }
         },
+        "security": [
+          {
+            "bearerAuth":[]
+          }
+        ],
         "servers": [
           {
             "url": "http://localhost:5000"
@@ -138,6 +145,11 @@
             }
           }
         },
+        "security": [
+          {
+            "bearerAuth":[]
+          }
+        ],
         "servers": [
           {
             "url": "http://localhost:5000"
@@ -152,18 +164,24 @@
     }
   },
   "components": {
-    "schemas": {},
-    "securitySchemes": {
-      "oauth2": {
-        "type": "oauth2",
-        "flows": {
-          "implicit": {
-            "authorizationUrl": "http://yourauthurl.com",
-            "scopes": {
-              "scope_name": "Enter your scopes here"
-            }
+    "schemas": {
+      "login_body":{
+        "type": "object",
+        "properties": {
+          "email":{
+            "type":"string"
+          },
+          "password":{
+            "type":"string"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth":{
+        "type": "http",
+        "scheme":"bearer",
+        "bearerFormat":"JWT"
       }
     }
   }

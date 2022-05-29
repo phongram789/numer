@@ -8,6 +8,7 @@ const AlgebraLatex = require("algebra-latex");
 const math = require("mathjs");
 
 
+
 var dataInTable = [];
 var columns2 = [
   {
@@ -113,50 +114,32 @@ export default class Test extends Component {
     console.log("initialValue");
   }
 
-  C(n) {
-    console.log("C", n);
-    if (n === 1) {
-      return 0;
-    } else {
-      return (
-        (y[interpolatePoint[n]] - y[interpolatePoint[n - 1]]) /
-          (x[interpolatePoint[n]] - x[interpolatePoint[n - 1]]) -
-        this.C(n - 1)
-      );
-    }
-  }
-  findX(n, X) {
-    if (n < 1) {
-      return 1;
-    } else {
-      console.log(X + " - " + x[interpolatePoint[n]]);
-      return (X - x[interpolatePoint[n]]) * this.findX(n - 1, X);
-    }
-  }
-
-  newton_difference(n, X) {
-    this.initialValue();
-    fx = y[1];
-    if (n === 2) {
-      //if linear interpolate
-      fx +=
-        ((y[interpolatePoint[2]] - y[interpolatePoint[1]]) /
-          (x[interpolatePoint[2]] - x[interpolatePoint[1]])) *
-        (X - x[interpolatePoint[1]]);
-    } else {
-      for (var i = 2; i <= n; i++) {
-        fx +=
-          (this.C(i) / (x[interpolatePoint[i]] - x[interpolatePoint[1]])) *
-          this.findX(i - 1, X);
+  L(X, index, n) {
+    var numerate = 1 /*ตัวเศษ*/,
+      denominate = 1; /*ตัวส่วน*/
+    for (var i = 1; i <= n; i++) {
+      if (i !== index) {
+        numerate *= x[i] - X;
+        denominate *= x[i] - x[index];
       }
     }
+    console.log(numerate / denominate);
+    return parseFloat(numerate / denominate);
+  }
 
+  lagrange(n, X) {
+    fx = 0;
+    this.initialValue();
+    for (var i = 1; i <= n; i++) {
+      fx += this.L(X, i, n) * y[i];
+    }
     this.setState({
       showOutputCard: true,
     });
   }
+
   bi() {
-    this.newton_difference(
+    this.lagrange(
       parseInt(this.state.interpolatePoint),
       parseFloat(this.state.X)
     );
@@ -202,9 +185,7 @@ export default class Test extends Component {
     for (var i = 1; i <= n; i++) {
       x.push(
         <TextField
-          InputLabelProps={{
-            shrink: true,
-          }}
+
           style={{
             width: "100%",
             height: "50%",
@@ -214,7 +195,7 @@ export default class Test extends Component {
             fontSize: "18px",
             fontWeight: "bold",
           }}
-          label={"x"+i}
+          label={"x" + i}
           id={"x" + i}
           key={"x" + i}
           placeholder={"x" + i}
@@ -222,9 +203,6 @@ export default class Test extends Component {
       );
       y.push(
         <TextField
-          InputLabelProps={{
-            shrink: true,
-          }}
           style={{
             width: "100%",
             height: "50%",
@@ -234,7 +212,7 @@ export default class Test extends Component {
             fontSize: "18px",
             fontWeight: "bold",
           }}
-          label={"y" + i}
+          label={"y"+i}
           id={"y" + i}
           key={"y" + i}
           placeholder={"y" + i}
@@ -256,7 +234,7 @@ export default class Test extends Component {
   render() {
     return (
       <div>
-        <h1>Newton Divided Difference</h1>
+        <h1>Lagrange</h1>
         <div className="row">
           <div className="col">
             <div>
@@ -278,7 +256,6 @@ export default class Test extends Component {
               <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>
               <TextField
                 label={"X"}
-                type="number"
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -292,7 +269,7 @@ export default class Test extends Component {
               />
               <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>
               <TextField
-                label={"InterpolatePoint"}
+                label={"Interpolate Point"}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -305,7 +282,8 @@ export default class Test extends Component {
                 name="interpolatePoint"
                 placeholder="interpolatePoint"
               />
-              <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>
+              <br></br>
+              <br></br>
               <Button onClick={this.bi} variant="contained">
                 Submit
               </Button>
@@ -315,14 +293,12 @@ export default class Test extends Component {
                   marginLeft: "20%",
                 }}
                 onClick={this.Ex}
-                type="primary"
               >
                 Example
               </Button>
             </div>
             <br></br>
           </div>
-          <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>
           <div className="col">
             {this.state.showTableInput && (
               <div>
@@ -344,27 +320,29 @@ export default class Test extends Component {
             )}
           </div>
         </div>
+        <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>
         <Card>
-        {this.state.showTableInput2 && (
-          <div>
-            <h2>
-              interpolatePoint{" "}
-              {parseInt(this.state.interpolatePoint) === 2
-                ? "(Linear)"
-                : parseInt(this.state.interpolatePoint) === 3
-                ? "(Quadratic)"
-                : "(Polynomial)"}
-            </h2>
-            {tempTag}
-          </div>
-        )}
+          {this.state.showTableInput2 && (
+            <div>
+              <h2>
+                Interpolate Point{" "}
+                {parseInt(this.state.interpolatePoint) === 2
+                  ? "(Linear)"
+                  : parseInt(this.state.interpolatePoint) === 3
+                  ? "(Quadratic)"
+                  : "(Polynomial)"}
+              </h2>
+              {tempTag}
+            </div>
+          )}
         </Card>
-        <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>         
+        <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>          
         <Card
           title={"Output"}
           bordered={true}
           style={{
             width: "100%",
+            color: "#FFFFFFFF",
           }}
           id="outputCard"
         >

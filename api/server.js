@@ -3,8 +3,10 @@ const auth = require('json-server-auth')
 const middlewares = jsonServer.defaults({noCors:true})
 const app = jsonServer.create()
 const router = jsonServer.router('data.json')
+
 const swaggerUI=require('swagger-ui-express')
 const swaggerDocumant = require('./swag.json')
+
 var cors = require("cors")
 
 const rules = auth.rewriter({

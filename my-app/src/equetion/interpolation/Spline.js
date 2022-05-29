@@ -37,9 +37,7 @@ var columns1 = [
 var x = [],
   y = [],
   tableTag = [],
-  interpolatePoint = [],
-  tempTag = [],
-  fx;
+  answer;
 
 export default class Test extends Component {
   constructor(props) {
@@ -49,8 +47,6 @@ export default class Test extends Component {
     this.state = {
       nPoints: null,
       ans: [],
-      X: null,
-      interpolatePoint: null,
       showTableInput: false,
       showTableInpu2: false,
     };
@@ -61,7 +57,7 @@ export default class Test extends Component {
   async Ex() {
     console.log(this.props.Token)
     if(this.props.Token !== ""){
-      axios.get(`http://localhost:5000/api/nd`,{
+      axios.get(`http://localhost:5000/api/sp`,{
         headers:{
           Authorization: 'Bearer ' + this.props.Token
         }
@@ -72,7 +68,6 @@ export default class Test extends Component {
         this.setState({ 
           nPoints: data.col,
           X: data.Xi,
-          interpolatePoint: data.i,
         });
         console.log("nPoints", this.state.nPoints);
         this.createTableInput(parseInt(this.state.nPoints));
@@ -80,11 +75,6 @@ export default class Test extends Component {
         for (var i = 0; i < this.state.nPoints; i++) {
           document.getElementById("x" + (i + 1)).value = data.X[i];
           document.getElementById("y" + (i + 1)).value = data.Y[i];
-        }
-    
-        this.createInterpolatePointInput();
-        for (var i = 0; i < this.state.interpolatePoint; i++) {
-          document.getElementById("p" + (i + 1)).value = data.p[i];
         }
         this.forceUpdate();
         
@@ -95,104 +85,144 @@ export default class Test extends Component {
     }
   }
 
+  spline(x, xs, ys) {
+    var ks = xs.map(function () {
+      return 0;
+    });
+    ks = this.getNaturalKs(xs, ys, ks);
+    var i = 1;
+    while (xs[i] < x) i++;
+    var t = (x - xs[i - 1]) / (xs[i] - xs[i - 1]);
+    var a = ks[i - 1] * (xs[i] - xs[i - 1]) - (ys[i] - ys[i - 1]);
+    var b = -ks[i] * (xs[i] - xs[i - 1]) + (ys[i] - ys[i - 1]);
+    var q =
+      (1 - t) * ys[i - 1] + t * ys[i] + t * (1 - t) * (a * (1 - t) + b * t);
+    console.log(q);
+    this.setState({
+      showOutputCard: true,
+    });
+
+    return q;
+    
+  }
+
+  getNaturalKs(xs, ys, ks) {
+    var n = xs.length - 1;
+    var A = this.zerosMat(n + 1, n + 2);
+
+    for (
+      var i = 1;
+      i < n;
+      i++ // rows
+    ) {
+      A[i][i - 1] = 1 / (xs[i] - xs[i - 1]);
+      A[i][i] = 2 * (1 / (xs[i] - xs[i - 1]) + 1 / (xs[i + 1] - xs[i]));
+      A[i][i + 1] = 1 / (xs[i + 1] - xs[i]);
+      A[i][n + 1] =
+        3 *
+        ((ys[i] - ys[i - 1]) / ((xs[i] - xs[i - 1]) * (xs[i] - xs[i - 1])) +
+          (ys[i + 1] - ys[i]) / ((xs[i + 1] - xs[i]) * (xs[i + 1] - xs[i])));
+    }
+
+    A[0][0] = 2 / (xs[1] - xs[0]);
+    A[0][1] = 1 / (xs[1] - xs[0]);
+    A[0][n + 1] = (3 * (ys[1] - ys[0])) / ((xs[1] - xs[0]) * (xs[1] - xs[0]));
+
+    A[n][n - 1] = 1 / (xs[n] - xs[n - 1]);
+    A[n][n] = 2 / (xs[n] - xs[n - 1]);
+    A[n][n + 1] =
+      (3 * (ys[n] - ys[n - 1])) / ((xs[n] - xs[n - 1]) * (xs[n] - xs[n - 1]));
+
+    return this.solve(A, ks);
+  }
+
+  solve(A, ks) {
+    var m = A.length;
+    for (
+      var k = 0;
+      k < m;
+      k++ // column
+    ) {
+      // pivot for column
+      var i_max = 0;
+      var vali = Number.NEGATIVE_INFINITY;
+      for (var i = k; i < m; i++)
+        if (A[i][k] > vali) {
+          i_max = i;
+          vali = A[i][k];
+        }
+      this.swapRows(A, k, i_max);
+
+      // for all rows below pivot
+      for (i = k + 1; i < m; i++) {
+        for (var j = k + 1; j < m + 1; j++)
+          A[i][j] = A[i][j] - A[k][j] * (A[i][k] / A[k][k]);
+        A[i][k] = 0;
+      }
+    }
+    for (
+      i = m - 1;
+      i >= 0;
+      i-- // rows = columns
+    ) {
+      var v = A[i][m] / A[i][i];
+      ks[i] = v;
+      for (
+        j = i - 1;
+        j >= 0;
+        j-- // rows
+      ) {
+        A[j][m] -= A[j][i] * v;
+        A[j][i] = 0;
+      }
+    }
+    console.log(A);
+    return ks;
+  }
+
+  zerosMat(r, c) {
+    var A = [];
+    for (var i = 0; i < r; i++) {
+      A.push([]);
+      for (var j = 0; j < c; j++) A[i].push(0);
+    }
+    return A;
+  }
+
+  swapRows(m, k, l) {
+    var p = m[k];
+    m[k] = m[l];
+    m[l] = p;
+  }
+
   componentDidMount() {
     //ทำอัตโนมัติหลังจาก render เสร็จ
   }
   componentDidUpdate() {}
 
-  initialValue() {
+  initialValue(X) {
     x = [];
     y = [];
-    for (var i = 1; i <= this.state.nPoints; i++) {
-      x[i] = parseFloat(document.getElementById("x" + i).value);
-      y[i] = parseFloat(document.getElementById("y" + i).value);
+    for (var i = 0; i < this.state.nPoints; i++) {
+      x[i] = parseFloat(document.getElementById("x" + (i + 1)).value);
+      y[i] = parseFloat(document.getElementById("y" + (i + 1)).value);
     }
-    for (i = 1; i <= this.state.interpolatePoint; i++) {
-      interpolatePoint[i] = parseInt(document.getElementById("p" + i).value);
-    }
+    console.log("X", this.state.X);
+    console.log("x", x);
+    console.log("y", y);
+    answer = this.spline(X, x, y);
     console.log("initialValue");
   }
 
-  C(n) {
-    console.log("C", n);
-    if (n === 1) {
-      return 0;
-    } else {
-      return (
-        (y[interpolatePoint[n]] - y[interpolatePoint[n - 1]]) /
-          (x[interpolatePoint[n]] - x[interpolatePoint[n - 1]]) -
-        this.C(n - 1)
-      );
-    }
-  }
-  findX(n, X) {
-    if (n < 1) {
-      return 1;
-    } else {
-      console.log(X + " - " + x[interpolatePoint[n]]);
-      return (X - x[interpolatePoint[n]]) * this.findX(n - 1, X);
-    }
-  }
-
-  newton_difference(n, X) {
-    this.initialValue();
-    fx = y[1];
-    if (n === 2) {
-      //if linear interpolate
-      fx +=
-        ((y[interpolatePoint[2]] - y[interpolatePoint[1]]) /
-          (x[interpolatePoint[2]] - x[interpolatePoint[1]])) *
-        (X - x[interpolatePoint[1]]);
-    } else {
-      for (var i = 2; i <= n; i++) {
-        fx +=
-          (this.C(i) / (x[interpolatePoint[i]] - x[interpolatePoint[1]])) *
-          this.findX(i - 1, X);
-      }
-    }
-
-    this.setState({
-      showOutputCard: true,
-    });
-  }
   bi() {
-    this.newton_difference(
-      parseInt(this.state.interpolatePoint),
-      parseFloat(this.state.X)
-    );
     dataInTable = [];
+    this.initialValue(parseFloat(this.state.X));
+    console.log("answer", answer);
     dataInTable.push({
-      Ans: fx,
+      Ans: answer,
     });
 
-    console.log(fx);
     console.log("end");
-  }
-
-  createInterpolatePointInput() {
-    tempTag = [];
-    for (var i = 1; i <= this.state.interpolatePoint; i++) {
-      tempTag.push(
-        <TextField
-          style={{
-            width: "14%",
-            height: "50%",
-            marginInlineEnd: "5%",
-            marginBlockEnd: "5%",
-            color: "white",
-            fontSize: "18px",
-            fontWeight: "bold",
-          }}
-          label={"p" + i}
-          id={"p" + i}
-          key={"p" + i}
-          placeholder={"p" + i}
-        />
-      );
-    }
-    this.setState({
-      showTableInput2: true,
-    });
   }
 
   createTableInput(n) {
@@ -202,9 +232,7 @@ export default class Test extends Component {
     for (var i = 1; i <= n; i++) {
       x.push(
         <TextField
-          InputLabelProps={{
-            shrink: true,
-          }}
+
           style={{
             width: "100%",
             height: "50%",
@@ -214,7 +242,7 @@ export default class Test extends Component {
             fontSize: "18px",
             fontWeight: "bold",
           }}
-          label={"x"+i}
+          label={"x" + i}
           id={"x" + i}
           key={"x" + i}
           placeholder={"x" + i}
@@ -222,9 +250,6 @@ export default class Test extends Component {
       );
       y.push(
         <TextField
-          InputLabelProps={{
-            shrink: true,
-          }}
           style={{
             width: "100%",
             height: "50%",
@@ -234,7 +259,7 @@ export default class Test extends Component {
             fontSize: "18px",
             fontWeight: "bold",
           }}
-          label={"y" + i}
+          label={"y"+i}
           id={"y" + i}
           key={"y" + i}
           placeholder={"y" + i}
@@ -256,13 +281,13 @@ export default class Test extends Component {
   render() {
     return (
       <div>
-        <h1>Newton Divided Difference</h1>
+        <h1>Spline Interpolation</h1>
         <div className="row">
           <div className="col">
             <div>
-            <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>
+              <p>Number of points (n)</p>
               <TextField
-                label={"Number of points (n)"}
+                label={"Interpolate Point"}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -275,13 +300,8 @@ export default class Test extends Component {
                 name="nPoints"
                 placeholder="Number of points (n)"
               />
-              <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>
-              <TextField
-                label={"X"}
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
+              <p>X</p>
+              <Input
                 onChange={(e) => {
                   this.setState({ X: e.target.value });
                   this.forceUpdate();
@@ -290,29 +310,16 @@ export default class Test extends Component {
                 name="X"
                 placeholder="X"
               />
-              <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>
-              <TextField
-                label={"InterpolatePoint"}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={async (e) => {
-                  await this.setState({ interpolatePoint: e.target.value });
-                  this.createInterpolatePointInput();
-                  this.forceUpdate();
-                }}
-                value={this.state.interpolatePoint}
-                name="interpolatePoint"
-                placeholder="interpolatePoint"
-              />
-              <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>
-              <Button onClick={this.bi} variant="contained">
+              <br></br>
+              <br></br>
+              <Button onClick={this.bi} type="primary">
                 Submit
               </Button>
               <Button
-                variant="contained" color="success"
                 style={{
-                  marginLeft: "20%",
+                  marginLeft: "73%",
+                  backgroundColor: "#76D7C4",
+                  borderColor: "#76D7C4",
                 }}
                 onClick={this.Ex}
                 type="primary"
@@ -322,7 +329,6 @@ export default class Test extends Component {
             </div>
             <br></br>
           </div>
-          <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>
           <div className="col">
             {this.state.showTableInput && (
               <div>
@@ -344,27 +350,13 @@ export default class Test extends Component {
             )}
           </div>
         </div>
-        <Card>
-        {this.state.showTableInput2 && (
-          <div>
-            <h2>
-              interpolatePoint{" "}
-              {parseInt(this.state.interpolatePoint) === 2
-                ? "(Linear)"
-                : parseInt(this.state.interpolatePoint) === 3
-                ? "(Quadratic)"
-                : "(Polynomial)"}
-            </h2>
-            {tempTag}
-          </div>
-        )}
-        </Card>
-        <Box sx={{ height: 30, backgroundColor: (theme) => theme.palette.mode === 'light' ? '': 'rgb(255 132 132 / 25%)',}}/>         
+
         <Card
           title={"Output"}
           bordered={true}
           style={{
             width: "100%",
+            color: "#FFFFFFFF",
           }}
           id="outputCard"
         >

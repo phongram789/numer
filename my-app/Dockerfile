@@ -4,13 +4,13 @@ FROM node:15-alpine
 WORKDIR /client
 
 # copy both package
-COPY package.json /client
-COPY package-lock.json .
+COPY package*.json /.
+
 
 RUN npm i
 
 
-COPY . /client/
+COPY . .
 
 EXPOSE 3000
 
